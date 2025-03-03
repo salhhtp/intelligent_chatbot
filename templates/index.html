@@ -4,21 +4,86 @@
   <meta charset="utf-8">
   <title>Intelligent Chatbot</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    #chatbox { border: 1px solid #ccc; padding: 10px; width: 400px; height: 300px; overflow-y: scroll; margin-bottom: 10px; }
-    #userInput { width: 300px; padding: 8px; }
-    button { padding: 8px 12px; }
-    .message { margin: 5px 0; }
-    .user { color: #333; }
-    .bot { color: #007BFF; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      background: #4a90e2;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    #chatbox {
+      border: 1px solid #ddd;
+      background: white;
+      width: 90%;
+      max-width: 600px;
+      height: 400px;
+      overflow-y: scroll;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    #chatbox .message {
+      margin-bottom: 15px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    #chatbox .user {
+      text-align: right;
+      color: #333;
+    }
+    #chatbox .bot {
+      text-align: left;
+      color: #007BFF;
+    }
+    #input-area {
+      width: 90%;
+      max-width: 600px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    #userInput {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      padding: 12px 20px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #4a90e2;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #357ABD;
+    }
   </style>
 </head>
 <body>
-<h1>Intelligent Chatbot</h1>
+<header>Intelligent Chatbot</header>
 <div id="chatbox"></div>
-<input type="text" id="userInput" placeholder="Type your message here...">
-<button onclick="sendMessage()">Send</button>
-
+<div id="input-area">
+  <input type="text" id="userInput" placeholder="Type your message...">
+  <button onclick="sendMessage()">Send</button>
+</div>
 <script>
   async function sendMessage() {
     const inputField = document.getElementById('userInput');
@@ -26,6 +91,7 @@
     if (!message) return;
 
     appendMessage('User', message, 'user');
+    inputField.value = '';
 
     const response = await fetch('/ask', {
       method: 'POST',
@@ -35,8 +101,6 @@
 
     const data = await response.json();
     appendMessage('Bot', data.response, 'bot');
-
-    inputField.value = '';
     document.getElementById('chatbox').scrollTop = document.getElementById('chatbox').scrollHeight;
   }
 
